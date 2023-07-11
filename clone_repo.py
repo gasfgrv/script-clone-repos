@@ -34,6 +34,6 @@ for i in range(page_count):
     )
 
 for i in range(len(repos)):
-    clone_url = repos[i]['clone_url']
+    clone_url = repos[i]['ssh_url']
     folder_name = repos[i]['name']
     system(f'git clone {clone_url} {path.join(dir, folder_name)}')
