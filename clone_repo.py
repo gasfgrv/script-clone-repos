@@ -1,18 +1,18 @@
 from math import ceil
 from os import path, mkdir, system
-from json import loads
+
 from requests import get
 
-dir = input('Qual o diretório de destino? (Padrão: ~/workspace): ')
+diretorio = input('Qual o diretório de destino? (Padrão: ~/workspace): ')
 
-if not dir:
-    dir = path.join(path.expanduser("~"), 'workspace')
+if not diretorio:
+    diretorio = path.join(path.expanduser("~"), 'workspace')
 
-if not path.exists(dir):
-    mkdir(path.join(path.expanduser("~"), dir))
+if not path.exists(diretorio):
+    mkdir(path.join(path.expanduser("~"), diretorio))
 
 user = input('Qual o nome do usuário: ')
-token = input('Informe o personal token, caso não exista, crie um em https://github.com/settings/tokens/new com o escopo "repo" apenas: ')
+token = input('Informe o token, se não existe, crie um em https://github.com/settings/tokens/new com o escopo "repo": ')
 
 headers = {
     'Accept': 'application/vnd.github+json',
@@ -29,11 +29,11 @@ repos = []
 
 for i in range(page_count):
     repos.extend(
-        get(url=f'https://api.github.com/users/{user}/repos?per_page=10&page={i+1}',
+        get(url=f'https://api.github.com/users/{user}/repos?per_page=10&page={i + 1}',
             headers=headers).json()
     )
 
 for i in range(len(repos)):
     clone_url = repos[i]['ssh_url']
     folder_name = repos[i]['name']
-    system(f'git clone {clone_url} {path.join(dir, folder_name)}')
+    system(f'git clone {clone_url} {path.join(diretorio, folder_name)}')
